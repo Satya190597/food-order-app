@@ -7,12 +7,15 @@ import styles from './Header.module.css';
 // + Import Image.
 import mealsImage from '../../assets/meals.jpg';
 
+// + Import Component.
+import HeaderCartButton from './HeaderCartButton';
+
 const Header = () => {
     return (
         <Fragment>
             <header className={styles['header']}>
                 <h1>Food ordering app</h1>
-                <button>Cart</button>
+                <HeaderCartButton />
             </header>
             <div className={styles['main-image']}>
                 <img src={mealsImage} alt="A table full of delicious food." />
