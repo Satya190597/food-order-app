@@ -4,7 +4,7 @@ import styles from "./Cart.module.css";
 // + Import Component
 import Modal from "../UI/Modal";
 
-const Cart = () => {
+const Cart = (props) => {
   const cartItems = (
     <ul className={styles["cart-items"]}>
       {[{ id: "c1", name: "Sushi", amount: 2, price: 12.99 }].map((element) => (
@@ -22,7 +22,7 @@ const Cart = () => {
           <span>35.62</span>
         </div>
         <div className={styles["actions"]}>
-          <button className={styles["button--alt"]}>Close</button>
+          <button className={styles["button--alt"]} onClick={() => props.hideModalPopupHandler()}>Close</button>
           <button className={styles["button"]}>Order</button>
         </div>
       </div>

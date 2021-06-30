@@ -1,5 +1,5 @@
 // + Import defaults.
-import {Fragment} from 'react';
+import {Fragment,useState} from 'react';
 
 // + Import components.
 import Header from './components/Layout/Header';
@@ -10,10 +10,21 @@ import Cart from './components/Cart/Cart';
 import './App.css';
 
 function App() {
+
+  const [isCartItemVisible,setIsCartItemVisible] = useState(false)
+
+  const showCartItemModalPopup = () => {
+    setIsCartItemVisible(true)
+  }
+
+  const hideCartItemModalPopup = () => {
+    setIsCartItemVisible(false)
+  }
+
   return (
     <Fragment>
-      <Cart />
-      <Header />
+      { isCartItemVisible && <Cart hideModalPopupHandler={hideCartItemModalPopup} />}
+      <Header showModalPopupHandler={showCartItemModalPopup} />
       <MealsSummary/>
       <Meals />
     </Fragment>

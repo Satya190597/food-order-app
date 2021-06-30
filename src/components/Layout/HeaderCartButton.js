@@ -4,9 +4,9 @@ import CartIcon from "../Cart/CartIcon";
 // + Import CSS.
 import styles from "./HeaderCartButton.module.css";
 
-const HeaderCartButton = () => {
+const HeaderCartButton = (props) => {
     return (
-        <button className={styles.button}>
+        <button className={styles.button} onClick={() => props.showModalPopupHandler()}>
             <span className={styles.icon}>
                 <CartIcon />
             </span>
