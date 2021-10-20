@@ -11,7 +11,13 @@ import styles from "./HeaderCartButton.module.css";
 import CartContext from "../../store/CartContext";
 
 const HeaderCartButton = (props) => {
-  const context = useContext(CartContext);
+  // Use cart context.
+  const cartContext = useContext(CartContext);
+
+  const numberOfCartItem = cartContext.items.reduce((totalValue, item) => {
+    return totalValue + item.amount;
+  }, 0);
+  //const numberOfCartItem = cartContext.items;
 
   return (
     <button
@@ -22,7 +28,7 @@ const HeaderCartButton = (props) => {
         <CartIcon />
       </span>
       <span>Your Cart</span>
-      <span className={styles.badge}>{context.items.length}</span>
+      <span className={styles.badge}>{numberOfCartItem}</span>
     </button>
   );
 };

@@ -1,13 +1,15 @@
+import React from "react";
+
 // + Import CSS.
-import style from './Input.module.css';
+import style from "./Input.module.css";
 
-const Input = (props) => {
- return (
-     <div className={style["input"]}>
-         <label htmlFor={props.input.id}>{props.label}</label>
-         <input {...props.input}/>
-     </div>
- )
-}
+const Input = React.forwardRef((props, ref) => {
+  return (
+    <div className={style["input"]}>
+      <label htmlFor={props.input.id}>{props.label}</label>
+      <input {...props.input} ref={ref} />
+    </div>
+  );
+});
 
-export default Input
+export default Input;
