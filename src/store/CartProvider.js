@@ -1,21 +1,45 @@
 import React, { useReducer } from "react";
 import CartContext from "./CartContext";
 
+// + Import Utils.
+import { getUpdateItemsArray } from "./Utils/CartProviderUtil";
+
 const defaultCartState = {
   items: [],
-  totalAmount: 0,
+  totalPrice: 0,
 };
 
 const cartReducer = (state, action) => {
   if (action.type === "ADD_ITEM") {
-    const updatedItems = state.items.concat(action.item);
-    const updatedTotalAmount =
-      state.totalAmount + action.item.price * action.item.amount;
+    const updatedTotalPrice =
+      state.totalPrice + action.item.price * action.item.quantity;
     return {
-      items: updatedItems,
-      totalAmount: updatedTotalAmount,
+      items: getUpdateItemsArray(state.items, action.item),
+      totalPrice: updatedTotalPrice,
     };
   }
+  if (action.type === "REMOVE_ITEM") {
+    const existingItemIndex = state.items.findIndex((i) => i.id === action.id);
+    if (existingItemIndex == -1) {
+      return;
+    }
+    const existingItem = state.items[existingItemIndex];
+    const updatedTotalPrice = state.totalPrice - existingItem.price;
+    let updatedItemsArray = [...state.items];
+    if (existingItem.quantity === 1) {
+      updatedItemsArray.splice(existingItemIndex, 1);
+    } else {
+      updatedItemsArray[existingItemIndex] = {
+        ...updatedItemsArray[existingItemIndex],
+        quantity: updatedItemsArray[existingItemIndex].quantity - 1,
+      };
+    }
+    return {
+      items: updatedItemsArray,
+      totalPrice: updatedTotalPrice,
+    };
+  }
+  return defaultCartState;
 };
 
 const CartProvider = (props) => {
@@ -33,9 +57,9 @@ const CartProvider = (props) => {
   };
   const cartContext = {
     items: cartState.items,
-    totalAmount: cartState.totalAmount,
+    totalPrice: cartState.totalPrice,
     addItem: (item) => addItemHandler(item),
-    removeItem: (item) => removeItemHandler,
+    removeItem: (id) => removeItemHandler(id),
   };
   return (
     <CartContext.Provider value={cartContext}>

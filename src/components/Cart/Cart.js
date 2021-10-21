@@ -4,12 +4,40 @@ import styles from "./Cart.module.css";
 // + Import Component
 import Modal from "../UI/Modal";
 
+import { useContext } from "react";
+import CartContext from "../../store/CartContext";
+import CartItem from "./CartItem";
+
 const Cart = (props) => {
+  const cartContext = useContext(CartContext);
+
+  const totalAmount = cartContext.totalPrice;
+
+  const hasItems = cartContext.items.length > 0;
+
+  // Remove Handler
+  const removeHandler = (id) => {
+    cartContext.removeItem(id);
+  };
+  // Add Handler
+  const addHandler = (item) => {
+    cartContext.addItem({ ...item, quantity: 1 });
+  };
+
   const cartItems = (
     <ul className={styles["cart-items"]}>
-      {[{ id: "c1", name: "Sushi", amount: 2, price: 12.99 }].map((element) => (
-        <li key={element.id}>{element.name}</li>
-      ))}
+      {cartContext.items.map((item) => {
+        return (
+          <CartItem
+            key={item.id}
+            name={item.name}
+            price={item.price}
+            quantity={item.quantity}
+            onRemove={removeHandler.bind(null, item.id)}
+            onAdd={addHandler.bind(null, item)}
+          />
+        );
+      })}
     </ul>
   );
 
@@ -19,11 +47,16 @@ const Cart = (props) => {
         {cartItems}
         <div className={styles["total"]}>
           <span>Total Amount</span>
-          <span>35.62</span>
+          <span>{totalAmount.toFixed(2)}</span>
         </div>
         <div className={styles["actions"]}>
-          <button className={styles["button--alt"]} onClick={() => props.hideModalPopupHandler()}>Close</button>
-          <button className={styles["button"]}>Order</button>
+          <button
+            className={styles["button--alt"]}
+            onClick={() => props.hideModalPopupHandler()}
+          >
+            Close
+          </button>
+          {hasItems && <button className={styles["button"]}>Order</button>}
         </div>
       </div>
     </Modal>

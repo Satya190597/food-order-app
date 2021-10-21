@@ -13,11 +13,11 @@ const MealItem = (props) => {
 
   const price = `$${props.price}`;
 
-  const addToCartHandler = (amount) => {
+  const addToCartHandler = (quantity) => {
     cartContext.addItem({
       id: props.id,
       name: props.name,
-      amount: amount,
+      quantity: quantity,
       price: props.price,
     });
   };
