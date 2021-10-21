@@ -1,5 +1,5 @@
 // + Import Default
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 
 // + Import Component.
 import CartIcon from "../Cart/CartIcon";
@@ -11,6 +11,8 @@ import styles from "./HeaderCartButton.module.css";
 import CartContext from "../../store/CartContext";
 
 const HeaderCartButton = (props) => {
+  const [bumpAnimationIsActive, setBumpAnimationIsActive] = useState(false);
+
   // Use cart context.
   const cartContext = useContext(CartContext);
 
@@ -19,9 +21,27 @@ const HeaderCartButton = (props) => {
   }, 0);
   //const numberOfCartItem = cartContext.items;
 
+  const buttonClass = `${styles.button} ${
+    bumpAnimationIsActive ? styles.bump : ""
+  }`;
+
+  useEffect(() => {
+    if (cartContext.items.length >= 1) {
+      setBumpAnimationIsActive(true);
+    }
+    const timeout = setTimeout(() => {
+      setBumpAnimationIsActive(false);
+    }, 300);
+
+    // Cleanup Function.
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [cartContext.items]);
+
   return (
     <button
-      className={styles.button}
+      className={buttonClass}
       onClick={() => props.showModalPopupHandler()}
     >
       <span className={styles.icon}>
